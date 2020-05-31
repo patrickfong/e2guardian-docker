@@ -92,7 +92,8 @@ RUN \
     echo '######## Modify lighttpd.conf ########' && \
     sed -i 's|^.\{0,1\}var.basedir  = "/var/www/localhost"$|var.basedir  = "/app"|g' /etc/lighttpd/lighttpd.conf && \
     sed -i 's|^.\{0,1\}server.document-root = var.basedir + "/htdocs"$|server.document-root = var.basedir + "/nweb"|g' /etc/lighttpd/lighttpd.conf && \
-    sed -i 's|^.\{0,1\}# server.port          = 81$|server.port          = 82|g' /etc/lighttpd/lighttpd.conf
+    sed -i 's|^.\{0,1\}# server.port          = 81$|server.port          = 82|g' /etc/lighttpd/lighttpd.conf && \
+    sed -i 's|^.\{0,1\}var.logdir   = "/var/log/lighttpd"$|var.logdir   = "/app/log"|g' /etc/lighttpd/lighttpd.conf
 
 EXPOSE 8080
 
