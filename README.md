@@ -24,6 +24,7 @@ I ripped that straight from their website: [http://www.e2guardian.org](http://ww
 * Automatic enabling/disabling of [SSL MITM](https://github.com/beechfuzz/e2guardian-docker/wiki/SSL-MITM); not necessary to manually edit any files.
 * Included web-GUI ([Filebrowser](https://github.com/beechfuzz/e2guardian-docker/wiki/Filebrowser)) for easy editing of config files & lists, and quick restarting of the container.
 * Included web server ([Nweb](https://github.com/beechfuzz/e2guardian-docker/wiki/Nweb)) for painless distributing of SSL MITM CA certs for client browsers.
+* Included PAC file auto-generation
 * Included [tool](https://github.com/beechfuzz/e2guardian-docker/wiki/Important-Files-and-Directories#appsbine2g-mitmsh) for backing up and generating SSL MITM CA certs.
 
 &nbsp;
@@ -51,7 +52,17 @@ If you want persistent data, then run the following command instead:
         -e PGID=#### \
         --restart=unless-stopped \
         beechfuzz/e2guardian
-        
+
+### PAC file auto-generation
+
+If you want to auto-generate a proxy auto configuration file
+Define the following environment variables
+PAC set to on
+FQDN set to a naem that devices using this proxy can refer to the container
+PAC_NETWORK set to the LAN network. Used to bypasses proxy for LAN addresses.
+PAC_NETMASK set to LAN network mask.  Used to bypasses proxy for LAN addresses.
+
+
 For more advanced options, see the [Installing and Running](https://github.com/beechfuzz/e2guardian-docker/wiki/Installing-and-Running#arguments) section.
 
 &nbsp;

@@ -112,8 +112,23 @@ if [[ "$NWEB" = "on" ]]; then
     fi
 fi
 
-# Start lighttpd
-#
+#Create proxy.pac
+#----------------
+
+if [[ "$PAC" = "on" ]]; then
+    echo -e \
+        'function FindProxyForURL(url, host) {' \
+        '    if (isPlainHostName(host) || isInNet(host, "$PAC_NETWORK", "$PAC_NETMASK")) {' \
+        '    return "DIRECT";' \
+        '    } else {' \
+        '    return "PROXY $FQDN:8080";' \
+        '    }' \
+        '}' \  
+        > /app/nweb/proxy.pac
+fi
+
+#Start lighttpd
+#--------------
 lighttpd -f /etc/lighttpd/lighttpd.conf
 
 #Start e2guardian
