@@ -138,7 +138,7 @@ if [[ "$generatecerts" ]]; then
     #Root CA Private Key
     openssl genrsa 4096 > $caprivkey
     #Root CA Public Key (.crt)
-    openssl req -new -x509 -subj "/CN=e2guardian/O=e2guardian/C=US" -days 3650 -sha256 -key $caprivkey -out $capubkeycrt
+    openssl req -new -x509 -subj "/CN=e2guardian/O=Fong/ST=British Columbia/C=CA" -days 3650 -sha256 -key $caprivkey -out $capubkeycrt
     #Root CA Public Key (.der)
     openssl x509 -in $capubkeycrt -outform DER -out $capubkeyder
     #Private Key for upstream SSL certs
