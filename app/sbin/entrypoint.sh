@@ -112,6 +112,10 @@ if [[ "$NWEB" = "on" ]]; then
     fi
 fi
 
+# Start lighttpd
+#
+lighttpd -f /etc/lighttpd/lighttpd.conf
+
 #Start e2guardian
 #----------------
 e2guardian -N -c $conf/e2guardian.conf
