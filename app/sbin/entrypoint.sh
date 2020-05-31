@@ -89,37 +89,31 @@ if [[ "$FILEBROWSER" = "on" ]]; then
 	|| echo ERROR: Filebrowser failed to start!
 fi
 
-#Start Nweb
-#----------
+#Start lighttpd
+#--------------
 if [[ "$LIGHTTPD" = "on" ]]; then
     if [[ "$E2G_MITM" = "on" ]]; then
         (file_exists $e2g_capubkeycrt) && (! file_exists $nweb_crt) && ln -s $e2g_capubkeycrt $nweb_crt
         (file_exists $e2g_capubkeyder) && (! file_exists $nweb_der) && ln -s $e2g_capubkeyder $nweb_der
 	    lighttpd -f /etc/lighttpd/lighttpd.conf \
-		&& echo INFO: Nweb started and running on port 82. \
-		|| echo ERROR: Nweb failed to start!
+		&& echo INFO: lighttpd started and running on port 82. \
+		|| echo ERROR: lighttpd failed to start!
     else
         echo "WARNING: Nweb was configured to start even though SSL MITM is disabled.  Leaving Nweb off as it would serve no function."
     fi
 fi
 
-#Create proxy.pac
-#----------------
+#Add and configure proxy.pac
+#---------------------------
 
 if [[ "$PAC" = "on" ]]; then
-    echo -e \
-        "function FindProxyForURL(url, host) {" \
-        "    if (isPlainHostName(host) || isInNet(host, '"'$PAC_NETWORK'"', '"'$PAC_NETMASK'"')) {" \
-        "    return "DIRECT";" \
-        "    } else {" \
-        "    return '"'PROXY $FQDN:8080'"';" \
-        "    }" \
-        "}" > /app/nweb/proxy.pac
+    if [[ "$LIGHTTPD" = "on" ]]; then
+        cp /app/pac/proxy.pac $appnweb
+        sed -i "s|PAC_FQDN|$FQDN|g" $appnweb/proxy.pac
+        sed -i "s|PAC_NETWORK|$PAC_NETWORK|g" $appnweb/proxy.pac
+        sed -i "s|PAC_NETMASK|$PAC_NETMASK|g" $appnweb/proxy.pac
+    fi
 fi
-
-#Start lighttpd
-#--------------
-
 
 #Start e2guardian
 #----------------

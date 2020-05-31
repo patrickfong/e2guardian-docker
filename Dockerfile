@@ -95,6 +95,10 @@ RUN \
     sed -i 's|^.\{0,1\}# server.port          = 81$|server.port          = 82|g' /etc/lighttpd/lighttpd.conf && \
     sed -i 's|^.\{0,1\}var.logdir   = "/var/log/lighttpd"$|var.logdir   = "/app/log"|g' /etc/lighttpd/lighttpd.conf
 
+RUN \
+    echo '######## Copy proxy.pac ########'
+COPY pac/* /app/pac/
+
 EXPOSE 8080
 
 ENTRYPOINT ["/sbin/tini","-vv","-g","--","/app/sbin/entrypoint.sh"]
