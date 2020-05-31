@@ -5,7 +5,7 @@
 ###
 
 app="/app"
-appnweb="$app/nweb"
+appnweb="$app/web"
 conf="/config"
 e2g_ssl="$conf/ssl"
 e2g_servercerts="$e2g_ssl/servercerts"
@@ -57,15 +57,6 @@ chmod -R 700 $e2g_servercerts/*.pem $e2g_gencerts
 [[ "$E2G_MITM" = "on" ]] && args="e" || args="d"
 e2g-mitm.sh -$args
 
-#Deconflict Filebrowser and Nweb ports
-#-------------------------------------
-if [[ "$FILEBROWSER" = "on"  ]] \
-&& [[ "$NWEB" = "on" ]] \
-&& [[ "$FILEBROWSER_PORT" = "$NWEB_PORT" ]]; then
-    echo "ERROR: Filebrowser and Nweb are both configured for port $FILEBROWSER_PORT!"
-    exit 1
-fi
-
 #Start Filebrowser
 #-----------------
 if [[ "$FILEBROWSER" = "on" ]]; then
@@ -100,12 +91,12 @@ fi
 
 #Start Nweb
 #----------
-if [[ "$NWEB" = "on" ]]; then
+if [[ "$LIGHTTPD" = "on" ]]; then
     if [[ "$E2G_MITM" = "on" ]]; then
         (file_exists $e2g_capubkeycrt) && (! file_exists $nweb_crt) && ln -s $e2g_capubkeycrt $nweb_crt
         (file_exists $e2g_capubkeyder) && (! file_exists $nweb_der) && ln -s $e2g_capubkeyder $nweb_der
-	(nweb -p "$NWEB_PORT" -r "$appnweb" -l /app/log/nweb.log &) \
-		&& echo INFO: Nweb started and running on port "$NWEB_PORT". \
+	    lighttpd -f /etc/lighttpd/lighttpd.conf \
+		&& echo INFO: Nweb started and running on port 82. \
 		|| echo ERROR: Nweb failed to start!
     else
         echo "WARNING: Nweb was configured to start even though SSL MITM is disabled.  Leaving Nweb off as it would serve no function."
@@ -117,19 +108,18 @@ fi
 
 if [[ "$PAC" = "on" ]]; then
     echo -e \
-        'function FindProxyForURL(url, host) {' \
-        '    if (isPlainHostName(host) || isInNet(host, "$PAC_NETWORK", "$PAC_NETMASK")) {' \
-        '    return "DIRECT";' \
-        '    } else {' \
-        '    return "PROXY $FQDN:8080";' \
-        '    }' \
-        '}' \  
-        > /app/nweb/proxy.pac
+        "function FindProxyForURL(url, host) {" \
+        "    if (isPlainHostName(host) || isInNet(host, '"'$PAC_NETWORK'"', '"'$PAC_NETMASK'"')) {" \
+        "    return "DIRECT";" \
+        "    } else {" \
+        "    return '"'PROXY $FQDN:8080'"';" \
+        "    }" \
+        "}" > /app/nweb/proxy.pac
 fi
 
 #Start lighttpd
 #--------------
-lighttpd -f /etc/lighttpd/lighttpd.conf
+
 
 #Start e2guardian
 #----------------
