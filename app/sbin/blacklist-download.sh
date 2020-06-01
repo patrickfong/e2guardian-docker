@@ -38,9 +38,9 @@ wget $shallaListUri -O $workPath/shallalist.tar.gz || { echo "Unable to download
 echo "Unzippping shallalist.tar.gz"
 tar zxf $workPath/shallalist.tar.gz -C $workPath || { echo "Unable to extract $workPath/shallalist.tar.gz." && exit 1 ; }
 
-echo "Remove old list and move new list to $configPath/lists/shallasblacklist"
-rm -rf $configPath/lists/shallasblacklist
-mv $workPath/BL $configPath/lists/shallasblacklist || { echo "Unable to move new list to $configPath/shalla-blacklist" && exit 1 ; }
+echo "Remove old list and move new list to $configPath/lists/shallasblacklists"
+rm -rf $configPath/lists/shallasblacklists
+mv $workPath/BL $configPath/lists/shallasblacklists || { echo "Unable to move new list to $configPath/shalla-blacklist" && exit 1 ; }
 
 echo "Clean up work directory"
 rm -rf $workPath/BL
