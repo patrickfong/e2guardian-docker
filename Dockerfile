@@ -40,7 +40,7 @@ RUN \
 # Set permissions and backup /config directory
 RUN \
     echo '######## Set permissions for /app/sbin scripts ########' && \
-    chmod u+x /app/sbin/e2g-mitm.sh /app/sbin/entrypoint.sh && \
+    chmod u+x /app/sbin/e2g-mitm.sh /app/sbin/entrypoint.sh /app/sbin/blacklist-download.sh && \
     tar czf /app/config.gz /config
 
 
