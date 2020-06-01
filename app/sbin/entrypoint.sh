@@ -5,7 +5,7 @@
 ###
 
 app="/app"
-appnweb="$app/web"
+appnweb="$app/nweb"
 conf="/config"
 e2g_ssl="$conf/ssl"
 e2g_servercerts="$e2g_ssl/servercerts"
@@ -52,6 +52,15 @@ chown -R e2guardian:e2guardian /app /config
 chmod -R 755 $e2g_servercerts
 chmod -R 700 $e2g_servercerts/*.pem $e2g_gencerts
 
+#Deconflict Filebrowser and Nweb ports
+#-------------------------------------
+if [[ "$FILEBROWSER" = "on"  ]] \
+&& [[ "$LIGHTTPD" = "on" ]] \
+&& [[ "$FILEBROWSER_PORT" = "80" ]]; then
+    echo "ERROR: Filebrowser and Nweb are both configured for port $FILEBROWSER_PORT!"
+    exit 1
+fi
+
 #Prep E2Guardian
 #---------------
 [[ "$E2G_MITM" = "on" ]] && args="e" || args="d"
@@ -92,26 +101,19 @@ fi
 #Start lighttpd
 #--------------
 if [[ "$LIGHTTPD" = "on" ]]; then
-    if [[ "$E2G_MITM" = "on" ]]; then
-        (file_exists $e2g_capubkeycrt) && (! file_exists $nweb_crt) && ln -s $e2g_capubkeycrt $nweb_crt
-        (file_exists $e2g_capubkeyder) && (! file_exists $nweb_der) && ln -s $e2g_capubkeyder $nweb_der
-	    lighttpd -f /etc/lighttpd/lighttpd.conf \
-		&& echo INFO: lighttpd started and running on port 82. \
-		|| echo ERROR: lighttpd failed to start!
-    else
-        echo "WARNING: Nweb was configured to start even though SSL MITM is disabled.  Leaving Nweb off as it would serve no function."
-    fi
-fi
+    (file_exists $e2g_capubkeycrt) && (! file_exists $nweb_crt) && ln -s $e2g_capubkeycrt $nweb_crt
+    (file_exists $e2g_capubkeyder) && (! file_exists $nweb_der) && ln -s $e2g_capubkeyder $nweb_der
+    lighttpd -f /etc/lighttpd/lighttpd.conf \
+    && echo INFO: lighttpd started and running on port 80. \
+    || echo ERROR: lighttpd failed to start!
 
-#Add and configure proxy.pac
-#---------------------------
-
-if [[ "$PAC" = "on" ]]; then
-    if [[ "$LIGHTTPD" = "on" ]]; then
+    #Add and configure proxy.pac
+    if [[ "$PAC" = "on" ]]; then
         cp /app/pac/proxy.pac $appnweb
-        sed -i "s|PAC_FQDN|$FQDN|g" $appnweb/proxy.pac
+        sed -i "s|PAC_FQDN|$PAC_FQDN|g" $appnweb/proxy.pac
         sed -i "s|PAC_NETWORK|$PAC_NETWORK|g" $appnweb/proxy.pac
         sed -i "s|PAC_NETMASK|$PAC_NETMASK|g" $appnweb/proxy.pac
+        sudo ln -s $appnweb/proxy.pac $appnweb/wpad.dat
     fi
 fi
 
