@@ -21,7 +21,7 @@ RUN \
 # Filebrowser and Nweb
 RUN \
     echo '######## Install build packages ########' && \
-    apk add --update --no-cache curl gcc libc-dev argp-standalone linux-headers && \
+    apk add --update --no-cache curl gcc libc-dev argp-standalone linux-headers tzdata && \
     \
     echo '######## Install Filebrowser ########' && \
     mkdir -p /config/filebrowser && \
@@ -36,6 +36,11 @@ RUN \
         '<a href="cacertificate.crt">CA Certificate (crt)</a><p>' \
         '<a href="my_rootCA.der">CA Certificate (der)</a>' \
         > /app/nweb/index.html
+
+RUN \
+    echo '######## Set timezone ########' && \
+    cp /usr/share/zoneinfo/America/Vancouver /etc/localtime && \
+    echo "America/Vancouver" > /etc/timezone
 
 # Set permissions and backup /config directory
 RUN \
@@ -68,6 +73,8 @@ ENV PATH="${PATH}:/app/sbin" \
 VOLUME /config /app/log
 
 COPY --from=builder /app /app
+COPY --from=builder /etc/localtime /etc/localtime
+COPY --from=builder /etc/timezone /etc/timezone
 
 RUN \
     echo '######## Install required packages ########' && \
