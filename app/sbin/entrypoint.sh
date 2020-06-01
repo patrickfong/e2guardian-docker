@@ -113,7 +113,7 @@ if [[ "$LIGHTTPD" = "on" ]]; then
         sed -i "s|PAC_FQDN|$PAC_FQDN|g" $appnweb/proxy.pac
         sed -i "s|PAC_NETWORK|$PAC_NETWORK|g" $appnweb/proxy.pac
         sed -i "s|PAC_NETMASK|$PAC_NETMASK|g" $appnweb/proxy.pac
-        sudo ln -s $appnweb/proxy.pac $appnweb/wpad.dat
+        ln -s $appnweb/proxy.pac $appnweb/wpad.dat
     fi
 fi
 
