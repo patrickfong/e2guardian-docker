@@ -55,10 +55,10 @@ If you want persistent data, then run the following command instead:
 
 ### PAC file auto-generation
 
-If you want to auto-generate a proxy auto configuration file
+If you want to serve a proxy auto configuration file
 Define the following environment variables
 PAC set to on
-FQDN set to a naem that devices using this proxy can refer to the container
+PAC_FQDN set to a naem that devices using this proxy can refer to the container
 PAC_NETWORK set to the LAN network. Used to bypasses proxy for LAN addresses.
 PAC_NETMASK set to LAN network mask.  Used to bypasses proxy for LAN addresses.
 
