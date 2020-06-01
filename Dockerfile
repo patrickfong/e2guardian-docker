@@ -92,8 +92,9 @@ RUN \
     echo '######## Modify lighttpd.conf ########' && \
     sed -i 's|^.\{0,1\}var.basedir  = "/var/www/localhost"$|var.basedir  = "/app"|g' /etc/lighttpd/lighttpd.conf && \
     sed -i 's|^.\{0,1\}server.document-root = var.basedir + "/htdocs"$|server.document-root = var.basedir + "/nweb"|g' /etc/lighttpd/lighttpd.conf && \
-    sed -i 's|^.\{0,1\}# server.port          = 81$|server.port          = 82|g' /etc/lighttpd/lighttpd.conf && \
-    sed -i 's|^.\{0,1\}var.logdir   = "/var/log/lighttpd"$|var.logdir   = "/app/log"|g' /etc/lighttpd/lighttpd.conf
+    sed -i 's|^.\{0,1\}# server.port          = 81$|server.port          = 80|g' /etc/lighttpd/lighttpd.conf && \
+    sed -i 's|^.\{0,1\}var.logdir   = "/var/log/lighttpd"$|var.logdir   = "/app/log"|g' /etc/lighttpd/lighttpd.conf && \
+    sed -i 's|^.\{0,1\}  ".tar.bz2"      =>      "application/x-bzip-compressed-tar"$|  ".tar.bz2"      =>      "application/x-bzip-compressed-tar",\n  "wpad.dat"      =>      "application/x-ns-proxy-autoconfig"|g' /etc/lighttpd/mime-types.conf
 
 RUN \
     echo '######## Copy proxy.pac ########'
