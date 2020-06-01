@@ -113,8 +113,20 @@ if [[ "$LIGHTTPD" = "on" ]]; then
         sed -i "s|PAC_FQDN|$PAC_FQDN|g" $appnweb/proxy.pac
         sed -i "s|PAC_NETWORK|$PAC_NETWORK|g" $appnweb/proxy.pac
         sed -i "s|PAC_NETMASK|$PAC_NETMASK|g" $appnweb/proxy.pac
-        ln -s $appnweb/proxy.pac $appnweb/wpad.dat
+
+        # Only do this if soft link does not already exist
+        if [ ! -f "$appnweb/wpad.dat" ]; then
+            ln -s $appnweb/proxy.pac $appnweb/wpad.dat
+        fi
     fi
+fi
+
+#Download blacklist
+#------------------
+if [[ -f  /tmp/blacklist/shallalist.tar.gz ]]; then
+    echo "Blacklist archive already exists in this container, skipping download."
+else
+    /app/sbin/blacklist-download.sh
 fi
 
 #Start e2guardian
