@@ -7,7 +7,10 @@ function FindProxyForURL(url, host) {
       || isInNet(host, "13.107.64.0", "255.255.192.0") // Skype and Teams IP range (next 3)
       || isInNet(host, "52.112.0.0", "255.252.0.0")  
       || isInNet(host, "52.120.0.0", "255.252.0.0") 
-      || dnsDomainIs(host, ".zoom.us")) {
+      || dnsDomainIs(host, ".zoom.us")
+      || dnsDomainIs(host, ".dropbox.com")
+      || dnsDomainIs(host, ".dropboxapi.com")
+      || dnsDomainIs(host, ".smilebox.com")) {
       return "PROXY PAC_FQDN:3128"
     } else {
       return "PROXY PAC_FQDN:8080";
