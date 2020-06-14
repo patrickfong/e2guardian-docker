@@ -13,6 +13,7 @@ function FindProxyForURL(url, host) {
       || dnsDomainIs(host, ".rapid7.com")
       || dnsDomainIs(host, ".dropbox.com")
       || dnsDomainIs(host, ".dropboxapi.com")
+      || dnsDomainIs(host, ".perfectmemorials.com")
       || dnsDomainIs(host, ".smilebox.com")) {
       return "PROXY PAC_FQDN:3128"
     } else {
