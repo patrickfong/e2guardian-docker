@@ -6,8 +6,8 @@ function FindProxyForURL(url, host) {
     } else if (url.startsWith("wss:")
       || isInNet(host, "74.125.250.0", "255.255.255.0") // Google Meet IP range
       || isInNet(host, "13.107.64.0", "255.255.192.0")  // Skype and Teams IP range (next 3)
-      || isInNet(host, "52.112.0.0", "255.252.0.0")  
-      || isInNet(host, "52.120.0.0", "255.252.0.0") 
+      || isInNet(host, "52.112.0.0", "255.252.0.0")     // teams
+      || isInNet(host, "13.107.64.0", "255.255.192.0")  // teams
       || dnsDomainIs(host, ".zoom.us")			  // zoom
       || dnsDomainIs(host, ".cloudfront.net")	// zoom web site
       || dnsDomainIs(host, ".rapid7.com")
