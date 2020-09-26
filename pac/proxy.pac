@@ -14,6 +14,8 @@ function FindProxyForURL(url, host) {
       || dnsDomainIs(host, ".dropbox.com")
       || dnsDomainIs(host, ".dropboxapi.com")
       || dnsDomainIs(host, ".perfectmemorials.com")
+      || dnsDomainIs(host, ".googleusercontent.com")
+      || dnsDomainIs(host, ".manageengine.com")
       || dnsDomainIs(host, ".smilebox.com")) {
       return "PROXY PAC_FQDN:3128"
     } else {
