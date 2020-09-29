@@ -1,7 +1,23 @@
 function FindProxyForURL(url, host) {
     if (isPlainHostName(host) 
       || isInNet(host, "PAC_NETWORK", "PAC_NETMASK")
-      || dnsDomainIs(host, "desktopapp.smilebox.com")) {
+      || dnsDomainIs(host, "desktopapp.smilebox.com")
+      || dnsDomainIs(host, "waze.com")
+      || dnsDomainIs(host, ".life360.com")
+      || dnsDomainIs(host, ".zello.com")
+      || dnsDomainIs(host, ".clients.google.com")
+      || dnsDomainIs(host, "android-safebrowsing.google.com")
+      || dnsDomainIs(host, ".audible.ca")
+      || dnsDomainIs(host, ".line-apps.com")
+      || dnsDomainIs(host, ".wikipedia.org")
+      || dnsDomainIs(host, "inbox.google.com")
+      || dnsDomainIs(host, ".googleusercontent.com")
+      || dnsDomainIs(host, ".manageengine.com")
+      || dnsDomainIs(host, ".whatsapp.net")
+      || dnsDomainIs(host, "play.google.com")
+      || dnsDomainIs(host, "sites.google.com")
+      || dnsDomainIs(host, "yimg.com")
+    ) {
       return "DIRECT";
     } else if (url.startsWith("wss:")
       || isInNet(host, "74.125.250.0", "255.255.255.0") // Google Meet IP range
